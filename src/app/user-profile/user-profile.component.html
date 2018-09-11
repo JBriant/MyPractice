@@ -1,0 +1,276 @@
+<div class="main-content">
+  <div class="container-fluid">
+        <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-warning card-header-icon">
+                            <div class="card-icon">
+                                <i class="material-icons">content_copy</i>
+                            </div>
+                            <p class="card-category">Used Space</p>
+                            <h3 class="card-title">49/50
+                                <small>GB</small>
+                            </h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons text-danger">warning</i>
+                                <a href="#pablo">Get More Space...</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-success card-header-icon">
+                            <div class="card-icon">
+                                <i class="material-icons">store</i>
+                            </div>
+                            <p class="card-category">Revenue</p>
+                            <h3 class="card-title">$34,245</h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons">date_range</i> Last 24 Hours
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-danger card-header-icon">
+                            <div class="card-icon">
+                                <i class="material-icons">info_outline</i>
+                            </div>
+                            <p class="card-category">Fixed Issues</p>
+                            <h3 class="card-title">75</h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons">local_offer</i> Tracked from Github
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-info card-header-icon">
+                            <div class="card-icon">
+                                <i class="fa fa-twitter"></i>
+                            </div>
+                            <p class="card-category">Followers</p>
+                            <h3 class="card-title">+245</h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons">update</i> Just Updated
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header card-header-success">
+                    <h4 class="card-title ">Patients Table</h4>
+                    <p class="card-category"> Here is a subtitle for this table</p>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class=" text-primary">
+                                <th>
+                                    Pat ID
+                                </th>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Age
+                                </th>
+                                <th>
+                                    Gender
+                                </th>
+                                <th>
+                                    Date Of Birth
+                                </th>
+                                <th>
+                                    Nationality
+                                </th>
+                            </thead>
+                            <tbody *ngFor = "let title of fetchData">
+                                <tr>
+                                    <td>
+                                        {{title.id}}
+                                    </td>
+                                    <td>
+                                        {{title.fname}} {{title.lname}}
+                                    </td>
+                                    <td  class="text-primary">
+                                        {{title.age}}
+                                    </td>
+                                    <td>
+                                        {{title.gender}}
+                                    </td>
+                                    <td>
+                                        {{title.dateofbirth}}
+                                    </td>
+                                    <td class="text-primary">
+                                        {{title.nationality}}
+                                    </td>
+                                </tr>
+                               
+                            </tbody>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                    </div>
+                    
+                </div>
+            </div>
+            
+                <div class="card">
+                    <div class="card-header card-header-danger">
+                        <h4 class="card-title">New Patient</h4>
+                        <p class="card-category">Add patient</p>
+                    </div>
+                    <div class="card-body">
+                        <form #patForm="ngForm">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput required placeholder="Title" name="title" [(ngModel)]="patientModel.title">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                  <mat-form-field class="example-full-width">
+                                      <input matInput required placeholder="Family Name" name="familyName" [(ngModel)]="patientModel.familyname">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                      <input matInput required placeholder="First Name" name="firstName" [(ngModel)]="patientModel.firstname">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field class="example-full-width">
+                                      <input matInput required placeholder="Given Name" name="givenName" [(ngModel)]="patientModel.givenname">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                  <mat-form-field class="example-full-width">
+                                    <input matInput required placeholder="Phone" type="Number" name="phoneNumber" [(ngModel)]="patientModel.phonenumber">
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                  <mat-form-field class="example-full-width">
+                                    <mat-select placeholder="Gender" required type="text" name="gender" [(ngModel)]="patientModel.gender">
+                                        <mat-option value="male">male</mat-option>
+                                        <mat-option value="female">female</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                            </div>
+                           
+                            <div class="row">
+                                <div class="col-md-4">
+                                  <mat-form-field class="example-full-width">
+                                    <input matInput required placeholder="Birth Date" type="Date" name="birthDate" [(ngModel)]="patientModel.birthdate">
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                  <mat-form-field class="example-full-width">
+                                    <mat-select placeholder="Marital Status" required type="text" name="maritalStatus" [(ngModel)]="patientModel.maritalStatus">
+                                        <mat-option value="Annulled">Annulled</mat-option>
+                                        <mat-option value="Divorced">Divorced</mat-option>
+                                        <mat-option value="Interlocutory">Interlocutory</mat-option>
+                                        <mat-option value="Legally Separated">Legally Separated</mat-option>
+                                        <mat-option value="Married">Married</mat-option>
+                                        <mat-option value="Polygamous">Polygamous</mat-option>
+                                        <mat-option value="Never Married">Never Married</mat-option>
+                                        <mat-option value="Domestic Partner">Domestic Partner</mat-option>
+                                        <mat-option value="Unmarried">Unmarried</mat-option>
+                                        <mat-option value="Widowed">Widowed</mat-option>
+                                        <mat-option value="Unknown">Unknown</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                               
+                            </div>
+                            <button (click)="postProfile()" class="btn btn-danger btn-round">Add Patient</button>
+                            <button (click)="mysqlData()" class="btn btn-primary btn-round">SQL Connect</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            
+        </div>
+        
+          <div class="col-md-4">
+                <div class="card">
+                        <div class="card-header card-header-success">
+                            <h4 class="card-title ">Clinics</h4>
+                            <p class="card-category"> Here is a subtitle for this table</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class=" text-primary">
+                                        <th>
+                                            Clinic ID
+                                        </th>
+                                        <th>
+                                            Clinic Name
+                                        </th>
+                                        <th>
+                                            Clinic Days
+                                        </th>
+                                      
+                                    </thead>
+                                    <tbody *ngFor = "let clinic of clinicData">
+                                        <tr>
+                                            <td>
+                                                {{clinic.id}}
+                                            </td>
+                                            <td>
+                                                {{clinic.name}}
+                                            </td>
+                                            <td  class="text-primary">
+                                                {{clinic.clinicDays}}
+                                            </td>
+                                          
+                                        </tr>
+                                       
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+                    </div>
+              <!--<div class="card card-profile">
+                  <div class="card-avatar">
+                      <a href="#pablo">
+                          <img class="img" src="../assets/img/faces/marc.jpg" />
+                      </a>
+                  </div>
+                  <div class="card-body">
+                      <h6 class="card-category text-gray">{{title}}</h6>
+                      <h4 class="card-title"> {{firstname}} {{familyname}} {{lastname}}</h4>
+                      <h6 class="card-title"> {{phoneNumber}} </h6>
+                      <h6 class="card-title"> dob: {{birthDate}} Marital Status: {{maritalStatus}} Gender: {{gender}}</h6>
+                      <h6 class="card-title"> Language: {{language}} </h6>
+                      <br>
+                          <p class="card-description">
+                          Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
+                      </p>
+                      <a href="#pablo" class="btn btn-danger btn-round">Follow</a>
+                  </div>
+              </div> -->
+
+
+          </div>
+      </div>
+  </div>
+</div>
