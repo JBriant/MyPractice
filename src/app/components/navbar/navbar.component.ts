@@ -2,6 +2,8 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 import { ROUTES } from '../sidebar/sidebar.component';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import { Router } from '@angular/router';
+import { AuthService } from '../../auth.service';
+import { UserIdleService } from 'angular-user-idle';
 
 @Component({
   selector: 'app-navbar',
@@ -15,12 +17,24 @@ export class NavbarComponent implements OnInit {
     private toggleButton: any;
     private sidebarVisible: boolean;
 
-    constructor(location: Location,  private element: ElementRef, private router: Router) {
+    constructor(location: Location,  private element: ElementRef, private router: Router, private _authService: AuthService,private userIdle: UserIdleService) {
       this.location = location;
           this.sidebarVisible = false;
     }
 
     ngOnInit(){
+     //Start watching for user inactivity.
+     this.userIdle.startWatching();
+    
+     // Start watching when user idle is starting.
+     this.userIdle.onTimerStart().subscribe(count => console.log("user is idle timer started"));
+     
+     // Start watch when time is up.
+     this.userIdle.onTimeout().subscribe(() => {
+         localStorage.removeItem('token');
+         this.router.navigate(['/login'])
+        });
+
       this.listTitles = ROUTES.filter(listTitle => listTitle);
       const navbar: HTMLElement = this.element.nativeElement;
       this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];

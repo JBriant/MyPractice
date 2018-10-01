@@ -1,12 +1,12 @@
-<div class="logo">
+<div class="logo" *ngIf="_authService.loggedIn()">
     <a href="https://www.creative-tim.com" class="simple-text">
         <div class="logo-img">
             <img src="/assets/img/angular2-logo-red.png"/>
         </div>
-        Creative Tim
+        MyPractice
     </a>
 </div>
-<div class="sidebar-wrapper">
+<div class="sidebar-wrapper" *ngIf="_authService.loggedIn()">
   <div *ngIf="isMobileMenu()">
     <form class="navbar-form">
       <span class="bmd-form-group">

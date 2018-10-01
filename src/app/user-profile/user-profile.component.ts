@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { Patient } from '../patient';
 import {MatSelectModule} from '@angular/material/select';
-
+import { NgxPermissionsService } from 'ngx-permissions';
 
 
 @Component({
@@ -20,7 +20,7 @@ export class UserProfileComponent implements OnInit {
   name:string = '';
   family:string;
   gender:string;
-  found:boolean;
+  found:boolean; 
   myObj:object;
   familyname:string;
   title:string;
@@ -35,161 +35,46 @@ export class UserProfileComponent implements OnInit {
 
   fetchData = [];
   clinicData = [];
+  roles = [];
   patientModel = new Patient('','', '','',Date(),'',"",'');
 
-  constructor(private http: HttpClient) { }
+  constructor(private permissionsService: NgxPermissionsService, private http: HttpClient) { }
 
-    
+     
   ngOnInit() {
-    //api call to get specific user data. Used as profile at the right of the page in this case
-    this.http.get('http://45.56.87.77:8081/baseDstu3/Patient/2717')
-    .subscribe(
-      (data:any[]) =>{
-        this.myObj = data;
-        this.lastname = this.myObj.name[0].given[1];//Given Name
-        this.idNumber = this.myObj.id;//Id number
-        this.familyname = this.myObj.name[0].family;//family Name
-        this.firstname = this.myObj.name[0].given[0];//first Name
-        //this.title = this.myObj.name[0].prefix[0];//title
-        //console.log(this.myObj.telecom[0].system);//number type
-        this.phoneNumber = this.myObj.telecom[0].value;//number
-        this.gender = this.myObj.gender;//gender
-        this.birthDate = this.myObj.birthDate;//birthDate
-        this.maritalStatus = this.myObj.maritalStatus.coding[0].display;//marital Status
-        this.language=this.myObj.communication[0].language.coding[0].display;//language
-        
-        if(data.length){
-            console.log(this.family)
+   //Get user user access permissions
+    this.http.get('http://localhost:3000/api/xjoin?_join=ur.userroles,_j,r.roles&_on1=(ur.roleId,eq,r.roleId)&_fields=r.role,ur.userId&_size=50&_where=(userId,eq,1)').subscribe(
+      (permissions) => {
+        console.log(permissions)
+        var x = "";        
+        for (var i = 0; i < permissions.length; i++){
+          this.permissionsService.addPermission(permissions[i].r_role)
+          
         }
-        
+    
       }
     )
-
-    this.http.get('http://localhost:3000/patients')
+    
+    this.http.get('http://localhost:3000/api/patient')
     .subscribe(
       (data:any[])=>{
-        this.fetchData = data.response;
-        console.log("Patients data>>>>>> ",data);        
-      }  
+        this.fetchData = data;
+        //console.log("Patients data>>>>>> ",data);        
+      }   
     ) 
 
-    this.http.get('http://localhost:3000/clinics')
+    this.http.get('http://localhost:3000/api/clinics')
     .subscribe(
-      (data:any[])=>{
-        this.clinicData = data.response;
-        console.log("clinics Data>>>>",data);        
+      (data:any[])=>{ 
+        this.clinicData = data; 
+        //console.log("clinics Data>>>>",data);          
       }  
-    ) 
+    )  
  
    
   } 
-  maritalCode:string;
-  
-//To add a new patient the below class is called. But first we have to get the marital status code that correctly matches the status to avoid server error
-  postProfile(){
-    if(this.patientModel.maritalStatus === "Married"){
-      this.maritalCode = "M";
-    }
-    else if(this.patientModel.maritalStatus === "Never Married"){
-      this.maritalCode = "S";
-    }
-    else if(this.patientModel.maritalStatus === "Annulled"){
-      this.maritalCode = "A";
-    }
-    else if(this.patientModel.maritalStatus === "Divorced"){
-      this.maritalCode = "D"; 
-    }
-    else if(this.patientModel.maritalStatus === "Interlocutory"){
-      this.maritalCode = "I";
-    }
-    else if(this.patientModel.maritalStatus === "Legally Separated"){
-      this.maritalCode = "L";
-    }
-    else if(this.patientModel.maritalStatus === "Polygamous"){
-      this.maritalCode = "P";
-    }
-    else if(this.patientModel.maritalStatus === "Domestic Partner"){
-      this.maritalCode = "T";
-    }
-    else if(this.patientModel.maritalStatus === "Widowed"){
-      this.maritalCode = "V";
-    }
-    else{
-      this.maritalCode = "UNK";
-    }
+  maritalCode:string; 
 
-    //Now that we have the appropriate data lets fill in the gaps and post the data
-    this.http.post('http://45.56.87.77:8081/baseDstu3/Patient/', 
-    {
-      "resourceType": "Patient",
-      "id": "27171",
-      "meta": {
-        "versionId": "2",
-        "lastUpdated": "2018-08-04T15:44:26.484+03:00"
-      },
-      "text": {
-        "status": "additional",
-        "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Sample</div>"
-      },
-      "identifier": [
-        {
-          "system": "27172",
-          "value": "id"
-        }
-      ],
-      "active": true,
-      "name": [ 
-        {
-          "family": this.patientModel.familyname,
-          "given": [
-            this.patientModel.givenname,
-            this.patientModel.firstname
-          ],
-          "prefix": [
-            this.patientModel.title
-          ]
-        }
-      ],
-      "telecom": [
-        {
-          "system": "phone",
-          "value": this.patientModel.phonenumber,
-          "use": "home"
-        }
-      ],
-      "gender": this.patientModel.gender,
-      "birthDate": this.patientModel.birthdate,
-      "maritalStatus": {
-        "coding": [
-          {
-            "system": "http://hl7.org/fhir/v3/MaritalStatus",
-            "code": this.maritalCode,
-            "display": this.patientModel.maritalStatus
-          }
-        ]
-      },
-      "communication": [
-        {
-          "language": {
-            "coding": [
-              {
-                "system": "urn:ietf:bcp:47",
-                "code": "en-US",
-                "display": "English (United States)"
-              }
-            ]
-          }
-        }
-      ]
-    })
-      .subscribe(
-        (data:any)=>{
-          console.log(data);
-          
-        }
-      )
-
-  }
 
   //To delete a given patient make the api call with the specific patient ID
   deletePatient(){

@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 
 import { AppRoutingModule } from './app.routing';
@@ -20,15 +20,21 @@ import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { UpgradeComponent } from './upgrade/upgrade.component';
+import { UserIdleModule } from 'angular-user-idle';
 import {
   AgmCoreModule
 } from '@agm/core';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { MatSelectModule } from '@angular/material';
+import { AuthGuard } from './auth.guard';
+import { AuthService } from './auth.service';
+import { TokenInterceptorService } from './token-interceptor.service';
+//import { LoginComponent } from './login/login.component';
 @NgModule({
   exports: [
     MatSelectModule
-  ]
+  ],
+ // declarations: [LoginComponent]
 })
 export class DemoMaterialModule {}
 @NgModule({
@@ -44,6 +50,7 @@ export class DemoMaterialModule {}
     MatSelectModule,
     RouterModule,
     AppRoutingModule,
+    UserIdleModule.forRoot({idle: 150, timeout: 150, ping: 120}),
     AgmCoreModule.forRoot({
       apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
     })
@@ -53,7 +60,11 @@ export class DemoMaterialModule {}
     AdminLayoutComponent,
 
   ],
-  providers: [],
+  providers: [AuthGuard, AuthService, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptorService,
+    multi: true,
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -11,3 +11,10 @@ export class Patient {
 
     ){}
 }
+export class User {
+    constructor(
+        public userName: string,
+        public password: string,
+        public userId: number,
+    ){}
+}
